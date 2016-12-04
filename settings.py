@@ -1,4 +1,4 @@
-PROJECT_NAME = 'qianai'
+PROJECT_NAME = 'sample'
 
 # redis
 RD_HOST = 'localhost'
