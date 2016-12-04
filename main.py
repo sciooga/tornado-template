@@ -45,6 +45,8 @@ def str_json(obj):
         return {k: str_json(v) for k, v in obj.items()}
     if type(obj) is list:
         return [str_json(i) for i in obj]
+    if type(obj) in [int, float]:
+        return obj
     return str(obj)
 
 
