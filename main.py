@@ -8,6 +8,12 @@ import os
 import settings
 
 
+logging.basicConfig()
+logger = logging.getLogger()
+logger.setLevel(logging.DEBUG)
+logger.warn = lambda x: logging.Logger.warn(logger, u'\033[1;31m%s\033[0m' % x)
+
+
 def import_apps():
 
     """
@@ -39,6 +45,8 @@ def str_json(obj):
         return {k: str_json(v) for k, v in obj.items()}
     if type(obj) is list:
         return [str_json(i) for i in obj]
+    if type(obj) in [int, float]:
+        return obj
     return str(obj)
 
 
@@ -84,17 +92,18 @@ class BaseHandler(tornado.web.RequestHandler):
 
     rd = rd
     db = db
+    logger = logger
 
     def initialize(self):
         
         if self.settings.get('debug'):
             # for test
-            print("\n\033[1;31m%s\033[0m" % ('=' * 60))
+            self.logger.info("\n\033[1;31m%s\033[0m" % ('=' * 60))
             import json
             for i in [self.request.headers, self.request.arguments]:
-                print(json.dumps({k: ''.join(map(lambda x: x if type(x) is str else x.decode(), v)) for k, v in i.items()}, indent=2))
-                print("\033[1;34m%s\033[0m" % '-' * 60)
-            print(self.request.remote_ip)
+                self.logger.info(json.dumps({k: ''.join(map(lambda x: x if type(x) is str else x.decode(), v)) for k, v in i.items()}, indent=2))
+                self.logger.info("\033[1;34m%s\033[0m" % '-' * 60)
+            self.logger.info(self.request.remote_ip)
 
     def write_json(self, obj):
         self.set_header("Content-Type", "application/json; charset=UTF-8")
@@ -105,18 +114,16 @@ if __name__ == "__main__":
 
     port = 8866 if len(sys.argv) == 1 else int(sys.argv[1])
 
-    logging.getLogger().setLevel(logging.DEBUG)
-    logging.info("API server Starting on port %d" % port)
-
     import_apps()
     app = tornado.web.Application(
         route.get_routes(),
         debug=True
     )
     app.listen(port, xheaders=True)
+    logger.info("API server Starting on port %d" % port)
 
     try:
         tornado.ioloop.IOLoop.current().start()
     except KeyboardInterrupt:
-        logging.info("exiting...")
+        logger.info("exiting...")
         sys.exit(0)
