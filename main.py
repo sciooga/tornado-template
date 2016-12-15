@@ -72,14 +72,18 @@ class route(object):
         return self.routes
 
 
+rd = redis.Redis(host=settings.RD_HOST, port=settings.RD_PORT, db=settings.RD_DB)
+db = MongoClient()[settings.PROJECT_NAME]
+
+
 class BaseHandler(tornado.web.RequestHandler):
 
     """
     all handler should inherit from here
     """
 
-    rd = redis.Redis(host=settings.RD_HOST, port=settings.RD_PORT, db=settings.RD_DB)
-    db = MongoClient()[settings.PROJECT_NAME]
+    rd = rd
+    db = db
 
     def initialize(self):
         
