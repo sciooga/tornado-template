@@ -115,9 +115,13 @@ if __name__ == "__main__":
     port = 8866 if len(sys.argv) == 1 else int(sys.argv[1])
 
     import_apps()
+    ROOT = os.path.abspath(os.path.dirname(__file__))
     app = tornado.web.Application(
         route.get_routes(),
-        debug=True
+        debug=settings.DEBUG,
+        cookie_secret = settings.COOKIE_SECRET,
+        template_path = os.path.join(ROOT, "templates"),
+        static_path = os.path.join(ROOT, "static")
     )
     app.listen(port, xheaders=True)
     logger.info("API server Starting on port %d" % port)

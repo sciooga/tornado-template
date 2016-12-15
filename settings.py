@@ -1,4 +1,6 @@
 PROJECT_NAME = 'sample'
+DEBUG = True
+COOKIE_SECRET = PROJECT_NAME[:3] + PROJECT_NAME
 
 # redis
 RD_HOST = 'localhost'
