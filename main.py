@@ -38,6 +38,10 @@ def import_apps():
                 m = getattr(module, k)
                 if hasattr(m, 'SUPPORTED_METHODS') or k == 'route':
                     globals()[k] = m
+try:
+    unicode
+except:
+    unicode = str
 
 
 def str_json(obj):
@@ -45,7 +49,7 @@ def str_json(obj):
         return {k: str_json(v) for k, v in obj.items()}
     if type(obj) is list:
         return [str_json(i) for i in obj]
-    if type(obj) in [int, float]:
+    if type(obj) in [int, float, str, unicode]:
         return obj
     return str(obj)
 
