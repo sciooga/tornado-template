@@ -120,7 +120,7 @@ class BaseHandler(tornado.web.RequestHandler):
             'data': data
         })
 
-    def write_error(self, code, msg, data={}):
+    def write_err(self, code, msg, data={}):
         return self.write_json({
             'errcode': code,
             'msg': msg,
