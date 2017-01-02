@@ -113,6 +113,20 @@ class BaseHandler(tornado.web.RequestHandler):
         self.set_header("Content-Type", "application/json; charset=UTF-8")
         self.write(str_json(obj))
 
+    def write_success(self, data={}):
+        return self.write_json({
+            'errcode': 0,
+            'msg': 'success',
+            'data': data
+        })
+
+    def write_error(self, code, msg, data={}):
+        return self.write_json({
+            'errcode': code,
+            'msg': msg,
+            'data': data
+        })
+
 
 if __name__ == "__main__":
 
