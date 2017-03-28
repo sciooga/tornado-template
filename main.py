@@ -49,7 +49,7 @@ def str_json(obj):
         return {k: str_json(v) for k, v in obj.items()}
     if type(obj) is list:
         return [str_json(i) for i in obj]
-    if type(obj) in [int, float, str, unicode]:
+    if type(obj) in [int, float, str , bool, unicode]:
         return obj
     return str(obj)
 
