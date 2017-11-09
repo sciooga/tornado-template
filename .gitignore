@@ -1,7 +1,4 @@
 /dev.py
-/static
-app/static
-app/templates/app/app.html
 bin
 nohup.out
 .sass-cache

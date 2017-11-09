@@ -1,5 +1,6 @@
 from main import route, BaseHandler
 
+
 @route(r'/')
 class HelloWorld(BaseHandler):
 
