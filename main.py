@@ -1,14 +1,15 @@
 from pymongo import MongoClient
 import tornado.ioloop
 import tornado.web
+import settings
 import logging
 import redis
+import json
 import sys
 import os
-import settings
 
 
-logging.basicConfig()
+logging.basicConfig(format='%(asctime)s %(levelname)s: %(message)s', datefmt='%Y/%m/%dT%H:%M:%S')
 logger = logging.getLogger()
 logger.setLevel(logging.DEBUG)
 logger.warn = lambda x: logging.Logger.warn(logger, u'\033[1;31m%s\033[0m' % x)
@@ -102,12 +103,14 @@ class BaseHandler(tornado.web.RequestHandler):
         
         if self.settings.get('debug'):
             # for test
-            self.logger.info("\n\033[1;31m%s\033[0m" % ('=' * 60))
-            import json
+
+            debug_info = '\n\033[1;31m%s\033[0m' % ('=' * 30)
             for i in [self.request.headers, self.request.arguments]:
-                self.logger.info(json.dumps({k: ''.join(map(lambda x: x if type(x) is str else x.decode(), v)) for k, v in i.items()}, indent=2))
-                self.logger.info("\033[1;34m%s\033[0m" % '-' * 60)
-            self.logger.info(self.request.remote_ip)
+                debug_info += '\n'
+                debug_info += json.dumps({k: ''.join(map(lambda x: x if type(x) is str else x.decode(), v)) for k, v in i.items()}, indent=2)
+                debug_info += '\n'
+                debug_info += '\033[1;34m%s\033[0m' % ('-' * 30)
+            self.logger.debug(debug_info)
 
     def write_json(self, obj):
         self.set_header("Content-Type", "application/json; charset=UTF-8")
