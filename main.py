@@ -85,7 +85,7 @@ class route(object):
         return self.routes
 
 
-rd = redis.Redis(host=settings.RD_HOST, port=settings.RD_PORT, db=settings.RD_DB)
+rd = redis.Redis(host=settings.RD_HOST, port=settings.RD_PORT, db=settings.RD_DB, charset="utf-8", decode_responses=True)
 db = MongoClient()[settings.PROJECT_NAME]
 
 
